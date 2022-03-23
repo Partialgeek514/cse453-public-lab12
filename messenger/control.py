@@ -7,4 +7,9 @@
 #    This class stores the notion of Bell-LaPadula
 ########################################################################
 
-# you may need to put something here...
+from enum import Enum
+class Control(Enum):
+    PUBLIC = 1
+    CONFIDENTIAL = 2
+    PRIVILEGED = 3
+    SECRET = 4

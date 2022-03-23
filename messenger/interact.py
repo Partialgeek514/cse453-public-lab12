@@ -7,23 +7,25 @@
 #    This class allows one user to interact with the system
 ########################################################################
 
-import messages, control
+import messages
+from control import Control
 
 ###############################################################
 # USER
 # User has a name and a password
 ###############################################################
 class User:
-    def __init__(self, name, password):
+    def __init__(self, name, password, security_level):
         self.name = name
         self.password = password
+        self.security_level = security_level
 
 userlist = [
-   [ "AdmiralAbe",     "password" ],  
-   [ "CaptainCharlie", "password" ], 
-   [ "SeamanSam",      "password" ],
-   [ "SeamanSue",      "password" ],
-   [ "SeamanSly",      "password" ]
+   [ "AdmiralAbe",     "password", Control.SECRET ],  
+   [ "CaptainCharlie", "password", Control.PRIVILEGED ], 
+   [ "SeamanSam",      "password", Control.CONFIDENTIAL ],
+   [ "SeamanSue",      "password", Control.CONFIDENTIAL ],
+   [ "SeamanSly",      "password", Control.CONFIDENTIAL ]
 ]
 
 ###############################################################
@@ -45,7 +47,7 @@ class Interact:
     # Authenticate the user and get him/her all set up
     ##################################################
     def __init__(self, username, password, messages):
-        self._authenticate(username, password)
+        self.auth = self._authenticate(username, password)
         self._username = username
         self._p_messages = messages
 

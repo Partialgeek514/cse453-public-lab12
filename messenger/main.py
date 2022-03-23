@@ -49,13 +49,14 @@ def simple_prompt(prompt):
 ####################################################
 def session(messages):
     open_session()
+    interact_ = interact.Interact('','','')
+    while interact_.auth == False:
+        print("Users:")
+        interact.display_users()
+        username = simple_prompt("\nWhat is your username? ")
+        password = simple_prompt("What is your password? ")
 
-    print("Users:")
-    interact.display_users()
-    username = simple_prompt("\nWhat is your username? ")
-    password = simple_prompt("What is your password? ")
-
-    interact_ = interact.Interact(username, password, messages)
+        interact_ = interact.Interact(username, password, messages)
     print(f"\nWelcome, {username}. Please select an option:\n")
     display_options()
 

@@ -7,7 +7,7 @@
 #    This class stores the notion of a message
 ########################################################################
 
-import control
+from control import Control
 
 ##################################################
 # MESSAGE
@@ -23,6 +23,7 @@ class Message:
     # Set a message to empty
     ##################################################
     def __init__(self):
+        self.text_control = Control.PUBLIC
         self._empty = True
         self._text = "Empty"
         self._author = ""
@@ -34,7 +35,8 @@ class Message:
     # MESSAGE NON-DEFAULT CONSTRUCTOR
     # Create a message and fill it
     ##################################################   
-    def __init__(self, text, author, date):
+    def __init__(self, text_control, text, author, date):
+        self.text_control = Control[text_control.upper()]
         self._text = text
         self._author = author
         self._date = date
@@ -82,3 +84,9 @@ class Message:
         self._author = ""
         self._date = ""
         self._empty = True
+
+    def securityConditionRead(assetControl, subjectControl):
+        return subjectControl >= assetControl
+    
+    def securityConditionWrite(assetControl, subjectControl):
+        return subjectControl <= assetControl 
