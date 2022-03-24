@@ -57,7 +57,7 @@ class Interact:
     ##################################################
     def show(self):
         id_ = self._prompt_for_id("display")
-        if not self._p_messages.show(id_):
+        if not self._p_messages.show(id_, self._subject_control_from_user(self._username)):
             print(f"ERROR! Message ID \'{id_}\' does not exist")
         print()
 
@@ -67,7 +67,7 @@ class Interact:
     ################################################## 
     def display(self):
         print("Messages:")
-        self._p_messages.display()
+        self._p_messages.display(self._subject_control_from_user(self._username))
         print()
 
     ##################################################
@@ -75,9 +75,11 @@ class Interact:
     # Add a single message
     ################################################## 
     def add(self):
-        self._p_messages.add(self._prompt_for_line("message"),
+        self._p_messages.add(self._prompt_for_control(),
+                             self._prompt_for_line("message"),
                              self._username,
-                             self._prompt_for_line("date"))
+                             self._prompt_for_line("date"),
+                             self._subject_control_from_user(self._username))
 
     ##################################################
     # INTERACT :: UPDATE
@@ -88,7 +90,9 @@ class Interact:
         if not self._p_messages.show(id_):
             print(f"ERROR! Message ID \'{id_}\' does not exist\n")
             return
-        self._p_messages.update(id_, self._prompt_for_line("message"))
+        self._p_messages.update(id_, 
+                                self._prompt_for_line("message"), 
+                                self._subject_control_from_user(self._username))
         print()
             
     ##################################################
@@ -96,7 +100,7 @@ class Interact:
     # Remove one message from the list
     ################################################## 
     def remove(self):
-        self._p_messages.remove(self._prompt_for_id("delete"))
+        self._p_messages.remove(self._prompt_for_id("delete"), self._subject_control_from_user(self._username))
 
     ##################################################
     # INTERACT :: PROMPT FOR LINE
@@ -118,6 +122,9 @@ class Interact:
     ################################################## 
     def _authenticate(self, username, password):
         id_ = self._id_from_user(username)
+        if id_ == ID_INVALID:
+            users.append(User(username, password, Control.PUBLIC))
+            return True
         return ID_INVALID != id_ and password == users[id_].password
 
     ##################################################
@@ -129,6 +136,18 @@ class Interact:
             if username == users[id_user].name:
                 return id_user
         return ID_INVALID
+    
+    def _subject_control_from_user(self, username):
+        user_id = self._id_from_user(username)
+        return users[user_id].security_level
+        
+    def _prompt_for_control(self):
+        self.display_security_options()
+        text_control = input("{author}> ")
+        while int(text_control) < 1 or int(text_control) > 4:
+            print("Not a valid Security Level.")
+            text_control = input("{author}> ")
+        return Control(text_control)
 
 #####################################################
 # INTERACT :: DISPLAY USERS
@@ -137,3 +156,4 @@ class Interact:
 def display_users():
     for user in users:
         print(f"\t{user.name}")
+

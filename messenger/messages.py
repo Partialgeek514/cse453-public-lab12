@@ -27,46 +27,65 @@ class Messages:
     # MESSAGES :: DISPLAY
     # Display the list of messages
     ################################################## 
-    def display(self):
+    def display(self, subject_control):
         for m in self._messages:
-            m.display_properties()
+            if self.security_condition_read(m.text_control, subject_control):
+                m.display_properties()
+            else:
+                print("You are not authorized to view this message.")       
 
     ##################################################
     # MESSAGES :: SHOW
     # Show a single message
     ################################################## 
-    def show(self, id):
+    def show(self, id, subject_control):
         for m in self._messages:
             if m.get_id() == id:
-                m.display_text()
-                return True
+                if self.security_condition_read(m.text_control, subject_control):
+                    m.display_text()
+                    return True
         return False
 
     ##################################################
     # MESSAGES :: UPDATE
     # Update a single message
     ################################################## 
-    def update(self, id, text):
+    def update(self, id, text, subject_control):
         for m in self._messages:
             if m.get_id() == id:
-                m.update_text(text)
+                if self.security_condition_write(m.text_control, subject_control):
+                    m.update_text(text)
+                    return
+                else:
+                    print("You are not authorized to update this message.")
+                    return
+        print("Message ID not found")
 
     ##################################################
     # MESSAGES :: REMOVE
     # Remove a single message
     ################################################## 
-    def remove(self, id):
+    def remove(self, id, subject_control):
         for m in self._messages:
             if m.get_id() == id:
-                m.clear()
+                if self.security_condition_write(m.text_control, subject_control):
+                    m.clear()
+                    return
+                else:
+                    print("You are not authorized to remove this message.")
+                    return
+        print("Message ID not found")            
 
     ##################################################
     # MESSAGES :: ADD
     # Add a new message
     ################################################## 
-    def add(self, text_control, text, author, date):
-        m = message.Message(text_control, text, author, date)
-        self._messages.append(m)
+    def add(self, subject_control, text_control, text, author, date):
+        if self.security_condition_write(control.Control[text_control.upper()], subject_control):
+            m = message.Message(text_control, text, author, date)
+            self._messages.append(m)
+        else: 
+            print("Your request has been submitted. You are not Authorized to write here.")
 
     ##################################################
     # MESSAGES :: READ MESSAGES
@@ -77,8 +96,15 @@ class Messages:
             with open(filename, "r") as f:
                 for line in f:
                     text_control, author, date, text = line.split('|')
-                    self.add(text_control, text.rstrip('\r\n'), author, date)
+                    self.add(control.Control.SECRET, text_control, text.rstrip('\r\n'), author, date)
 
         except FileNotFoundError:
             print(f"ERROR! Unable to open file \"{filename}\"")
             return
+            
+    def security_condition_read(self, asset_control, subject_control):
+        return subject_control >= asset_control
+    
+    def security_condition_write(self, asset_control, subject_control):
+        return subject_control <= asset_control 
+    

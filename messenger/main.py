@@ -50,6 +50,7 @@ def simple_prompt(prompt):
 def session(messages):
     open_session()
     interact_ = interact.Interact('','','')
+    username = ""
     while interact_.auth == False:
         print("Users:")
         interact.display_users()

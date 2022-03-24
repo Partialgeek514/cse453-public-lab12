@@ -43,6 +43,8 @@ class Message:
         self._id = Message._id_next
         Message._id_next += 1
         self._empty = False
+        
+            
 
     ##################################################
     # MESSAGE :: GET ID
@@ -84,9 +86,3 @@ class Message:
         self._author = ""
         self._date = ""
         self._empty = True
-
-    def securityConditionRead(assetControl, subjectControl):
-        return subjectControl >= assetControl
-    
-    def securityConditionWrite(assetControl, subjectControl):
-        return subjectControl <= assetControl 
