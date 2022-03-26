@@ -75,11 +75,13 @@ class Interact:
     # Add a single message
     ################################################## 
     def add(self):
-        self._p_messages.add(self._prompt_for_control(),
+        self._p_messages.add(
+                             self._subject_control_from_user(self._username),
+                             self._prompt_for_control(),
                              self._prompt_for_line("message"),
                              self._username,
                              self._prompt_for_line("date"),
-                             self._subject_control_from_user(self._username))
+                            )
 
     ##################################################
     # INTERACT :: UPDATE
@@ -144,10 +146,21 @@ class Interact:
     def _prompt_for_control(self):
         self.display_security_options()
         text_control = input("{author}> ")
-        while int(text_control) < 1 or int(text_control) > 4:
+        while not hasattr(Control, text_control.upper()):
             print("Not a valid Security Level.")
             text_control = input("{author}> ")
-        return Control(text_control)
+        return text_control
+
+    def display_security_options(self):
+        options = [
+            "PUBLIC",
+            "CONFIDENTIAL",
+            "PRIVILEGED",
+            "SECRET"
+        ]
+
+        for index, value in enumerate(options, start=1):
+            print(f"Option {index}: {value}")
 
 #####################################################
 # INTERACT :: DISPLAY USERS
