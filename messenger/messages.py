@@ -38,11 +38,14 @@ class Messages:
     # MESSAGES :: SHOW
     # Show a single message
     ################################################## 
-    def show(self, id, subject_control):
+    def show(self, id, subject_control, update_bool=False):
         for m in self._messages:
             if m.get_id() == id:
-                if self.security_condition_read(m.text_control, subject_control):
-                    m.display_text()
+                if update_bool == False:
+                    if self.security_condition_read(m.text_control, subject_control):
+                        m.display_text()
+                        return True
+                else:
                     return True
         return False
 

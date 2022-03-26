@@ -87,7 +87,7 @@ class Interact:
     ################################################## 
     def update(self):
         id_ = self._prompt_for_id("update")
-        if not self._p_messages.show(id_):
+        if not self._p_messages.show(id_, self._subject_control_from_user(self._username), True):
             print(f"ERROR! Message ID \'{id_}\' does not exist\n")
             return
         self._p_messages.update(id_, 
