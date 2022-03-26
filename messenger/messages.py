@@ -81,11 +81,11 @@ class Messages:
     # Add a new message
     ################################################## 
     def add(self, subject_control, text_control, text, author, date):
-        if self.security_condition_write(control.Control[text_control.upper()], subject_control):
+        # if self.security_condition_write(control.Control[text_control.upper()], subject_control):
             m = message.Message(text_control, text, author, date)
             self._messages.append(m)
-        else: 
-            print("Your request has been submitted. You are not Authorized to write here.")
+        # else: 
+        #     print("Your request has been submitted. You are not Authorized to write here.")
 
     ##################################################
     # MESSAGES :: READ MESSAGES

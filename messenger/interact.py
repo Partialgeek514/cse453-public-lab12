@@ -122,7 +122,7 @@ class Interact:
     ################################################## 
     def _authenticate(self, username, password):
         id_ = self._id_from_user(username)
-        if id_ == ID_INVALID:
+        if id_ == ID_INVALID and username != '':
             users.append(User(username, password, Control.PUBLIC))
             return True
         return ID_INVALID != id_ and password == users[id_].password
