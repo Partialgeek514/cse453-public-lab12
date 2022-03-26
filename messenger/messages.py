@@ -32,7 +32,7 @@ class Messages:
             if self.security_condition_read(m.text_control, subject_control):
                 m.display_properties()
             else:
-                print("You are not authorized to view this message.")       
+                print("\tYou are not authorized to view this message.")       
 
     ##################################################
     # MESSAGES :: SHOW
