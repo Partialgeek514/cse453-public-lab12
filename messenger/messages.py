@@ -84,7 +84,9 @@ class Messages:
     # Add a new message
     ################################################## 
     def add(self, subject_control, text_control, text, author, date, messageLoading=False):
-        if self.security_condition_write(text_control, subject_control) or messageLoading:
+        
+
+        if self.security_condition_write(control.Control[text_control.upper()], subject_control) or messageLoading:
             m = message.Message(text_control, text, author, date)
             self._messages.append(m)
         else: 
