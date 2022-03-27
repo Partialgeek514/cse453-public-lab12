@@ -77,7 +77,7 @@ class Interact:
     def add(self):
         self._p_messages.add(
                              self._subject_control_from_user(self._username),
-                             self._prompt_for_control(),
+                             self._prompt_for_control(self._username),
                              self._prompt_for_line("message"),
                              self._username,
                              self._prompt_for_line("date"),
@@ -143,12 +143,12 @@ class Interact:
         user_id = self._id_from_user(username)
         return users[user_id].security_level
         
-    def _prompt_for_control(self):
+    def _prompt_for_control(self, author):
         self.display_security_options()
-        text_control = input("{author}> ")
+        text_control = input(f"{author}> ")
         while not hasattr(Control, text_control.upper()):
             print("Not a valid Security Level.")
-            text_control = input("{author}> ")
+            text_control = input(f"{author}> ")
         return text_control
 
     def display_security_options(self):

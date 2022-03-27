@@ -83,12 +83,12 @@ class Messages:
     # MESSAGES :: ADD
     # Add a new message
     ################################################## 
-    def add(self, subject_control, text_control, text, author, date):
-        # if self.security_condition_write(control.Control[text_control.upper()], subject_control):
+    def add(self, subject_control, text_control, text, author, date, messageLoading=False):
+        if self.security_condition_write(text_control, subject_control) or messageLoading:
             m = message.Message(text_control, text, author, date)
             self._messages.append(m)
-        # else: 
-        #     print("Your request has been submitted. You are not Authorized to write here.")
+        else: 
+             print("Your request has been submitted. You are not Authorized to write here.")
 
     ##################################################
     # MESSAGES :: READ MESSAGES
@@ -99,7 +99,7 @@ class Messages:
             with open(filename, "r") as f:
                 for line in f:
                     text_control, author, date, text = line.split('|')
-                    self.add(control.Control.SECRET, text_control, text.rstrip('\r\n'), author, date)
+                    self.add(control.Control.SECRET, text_control, text.rstrip('\r\n'), author, date, True)
 
         except FileNotFoundError:
             print(f"ERROR! Unable to open file \"{filename}\"")
